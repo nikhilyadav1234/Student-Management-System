@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Authentication - Student Management System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #00ffe0;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      margin-bottom: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .form-control::placeholder {
+      color: #ccc;
+    }
+
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 8px #00ffe0;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-auth {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-auth:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    }
+
+    .toggle-btns {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btns button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      background: rgba(255,255,255,0.1);
+      color: #eee;
+      transition: 0.3s;
+      border-radius: 10px;
+      margin: 4px;
+    }
+
+    .toggle-btns button:hover {
+      background: #00ffe0;
+      color: #000;
+    }
+
+    .toggle-btns button.active {
+      background: #00b894;
+      color: white;
+      box-shadow: 0 0 10px #00ffc3;
+    }
+
+    .form-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .form-section.active {
+      display: block;
+      opacity: 1;
+      animation: scaleIn 0.4s ease;
+    }
+
+    .btn-login {
+      background: #0984e3;
+      color: white;
+    }
+
+    .btn-login:hover {
+      background: #076cc1;
+    }
+
+    .btn-register {
+      background: #00cec9;
+      color: white;
+    }
+
+    .btn-register:hover {
+      background: #00b3af;
+    }
+
+    .btn-admin {
+      background: #e17055;
+      color: white;
+    }
+
+    .btn-admin:hover {
+      background: #d35400;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="toggle-btns">
+      <button id="showLogin" class="active" onclick="toggleForms('login')">Student Login</button>
+      <button id="showRegister" onclick="toggleForms('register')">Register</button>
+      <button id="showAdmin" onclick="toggleForms('admin')">Admin Login</button>
+    </div>
+
+    <!-- Student Login Form -->
+    <div id="loginForm" class="form-section active">
+      <h2>Student Login</h2>
+      <form action="LoginServlet" method="post">
+        <input type="email" name="email" class="form-control" placeholder="Enter Email" required>
+        <input type="password" name="password" class="form-control" placeholder="Enter Password" required>
+        <button type="submit" class="btn btn-login btn-auth">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerForm" class="form-section">
+      <h2>Student Register</h2>
+      <form action="RegisterStudentServlet" method="post">
+        <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+        <input type="email" name="email" class="form-control" placeholder="Email" required>
+        <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+        <input type="text" name="address" class="form-control" placeholder="Address" required>
+        <input type="text" name="branch" class="form-control" placeholder="Branch" required>
+        <input type="text" name="course" class="form-control" placeholder="Course" required>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <button type="submit" class="btn btn-register btn-auth">Register</button>
+      </form>
+    </div>
+
+    <!-- Admin Login Form -->
+    <div id="adminForm" class="form-section">
+      <h2>Admin Login</h2>
+      <form action="AdminLoginServlet" method="post">
+        <input type="text" name="email" class="form-control" placeholder="Admin Username" required>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
+        <button type="submit" class="btn btn-admin btn-auth">Login as Admin</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleForms(formType) {
+      const forms = ['login', 'register', 'admin'];
+
+      forms.forEach(type => {
+        const formEl = document.getElementById(type + 'Form');
+        const btnEl = document.getElementById('show' + capitalize(type));
+
+        if (type === formType) {
+          formEl.classList.add('active');
+          btnEl.classList.add('active');
+        } else {
+          formEl.classList.remove('active');
+          btnEl.classList.remove('active');
+        }
+      });
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  </script>
+</body>
+</html>
